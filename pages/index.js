@@ -30,7 +30,7 @@ export default function Home() {
 
   const submit = async () => {
     const data = Object.entries(answers).map(([qIndex, answer]) => ({
-      question: questions[qIndex],   // 🔥 문장 그대로 저장
+      question: Number(qIndex), // ⭐ 핵심 (0~5 숫자 저장)
       answer,
     }));
 
