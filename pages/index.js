@@ -41,7 +41,7 @@ export default function Home() {
 
   return (
     <div style={{ padding: 40 }}>
-      <h1>설문조사</h1>
+      <h1>설문조사(대상기간:2025.1.1~2025.12.31)</h1>
 
       {questions.map((q, i) => (
         <div key={i} style={{ marginBottom: 20 }}>
