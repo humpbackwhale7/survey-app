@@ -4,12 +4,15 @@ import { supabase } from "../lib/supabase";
 export default function Admin() {
   const [responses, setResponses] = useState([]);
 
+  // -------------------------
+  // 점수 기준 (핵심 수정)
+  // -------------------------
   const scoreMap = {
-    "매우 그렇다": 5,
-    "그렇다": 4,
-    "보통이다": 3,
-    "그렇지 않다": 2,
-    "매우 그렇지 않다": 1,
+    "매우 그렇다": 100,
+    "그렇다": 90,
+    "보통이다": 80,
+    "그렇지 않다": 60,
+    "매우 그렇지 않다": 50,
   };
 
   useEffect(() => {
@@ -30,20 +33,19 @@ export default function Admin() {
   };
 
   // -------------------------
-  // 1️⃣ 응답자 수
+  // 1️⃣ 응답자 수 (핵심 수정)
   // -------------------------
-  const respondentCount = responses.length;
+  const respondentCount = Math.floor(responses.length / 6);
 
   // -------------------------
-  // 2️⃣ 종합 평균
+  // 2️⃣ 종합 평균 (100점 기준)
   // -------------------------
-  const totalScore =
-    responses.reduce((sum, r) => {
-      return sum + (scoreMap[r.answer] || 0);
-    }, 0);
+  const totalScore = responses.reduce((sum, r) => {
+    return sum + (scoreMap[r.answer] || 0);
+  }, 0);
 
   const avgScore = responses.length
-    ? ((totalScore / responses.length) / 5 * 100).toFixed(1)
+    ? (totalScore / responses.length).toFixed(1)
     : 0;
 
   // -------------------------
@@ -64,7 +66,7 @@ export default function Admin() {
   });
 
   // -------------------------
-  // 4️⃣ 항목별 매핑
+  // 4️⃣ 항목별 매핑 (그대로 유지)
   // -------------------------
   const category = {
     "메뉴활용의 편리성": { sum: 0, count: 0 }, // 1,2
