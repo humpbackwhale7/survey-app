@@ -36,7 +36,7 @@ export default function Admin() {
     responses.length > 0 ? Math.ceil(responses.length / 6) : 0;
 
   // -------------------------
-  // 종합 평균 점수
+  // 종합 평균
   // -------------------------
   const totalScore = responses.reduce((sum, r) => {
     return sum + (scoreMap[r.answer] || 0);
@@ -52,8 +52,7 @@ export default function Admin() {
   const questionAvg = {};
 
   responses.forEach((r) => {
-    const q = Number(r.question); // 🔥 핵심 (안전하게 숫자만)
-
+    const q = Number(r.question); // ⭐ 핵심
     const score = scoreMap[r.answer] || 0;
 
     if (!questionAvg[q]) {
@@ -68,74 +67,58 @@ export default function Admin() {
   // 항목별 점수
   // -------------------------
   const category = {
-    "메뉴활용의 편리성": { sum: 0, count: 0 },
-    "디자인/가독성": { sum: 0, count: 0 },
-    "시스템 효율성": { sum: 0, count: 0 },
-    "오류예방": { sum: 0, count: 0 },
-    "오류해결": { sum: 0, count: 0 },
+    "메뉴활용의 편리성": { sum: 0, count: 0 }, // 0,1
+    "디자인/가독성": { sum: 0, count: 0 },     // 2
+    "시스템 효율성": { sum: 0, count: 0 },     // 3
+    "오류예방": { sum: 0, count: 0 },          // 4
+    "오류해결": { sum: 0, count: 0 },          // 5
   };
 
-responses.forEach((r) => {
-  const score = scoreMap[r.answer] || 0;
-  const q = r.question;
+  responses.forEach((r) => {
+    const q = Number(r.question);
+    const score = scoreMap[r.answer] || 0;
 
-  // 🔥 문장 기반 매핑 (정답 방식)
-  if (
-    q.includes("메뉴") ||
-    q.includes("화면 구성")
-  ) {
-    category["메뉴활용의 편리성"].sum += score;
-    category["메뉴활용의 편리성"].count += 1;
-  }
-
-  else if (q.includes("용어")) {
-    category["디자인/가독성"].sum += score;
-    category["디자인/가독성"].count += 1;
-  }
-
-  else if (q.includes("응답 속도")) {
-    category["시스템 효율성"].sum += score;
-    category["시스템 효율성"].count += 1;
-  }
-
-  else if (q.includes("오류 메시지")) {
-    category["오류예방"].sum += score;
-    category["오류예방"].count += 1;
-  }
-
-  else if (q.includes("전체 만족도")) {
-    category["오류해결"].sum += score;
-    category["오류해결"].count += 1;
-  }
-});
+    if (q === 0 || q === 1) {
+      category["메뉴활용의 편리성"].sum += score;
+      category["메뉴활용의 편리성"].count += 1;
+    } else if (q === 2) {
+      category["디자인/가독성"].sum += score;
+      category["디자인/가독성"].count += 1;
+    } else if (q === 3) {
+      category["시스템 효율성"].sum += score;
+      category["시스템 효율성"].count += 1;
+    } else if (q === 4) {
+      category["오류예방"].sum += score;
+      category["오류예방"].count += 1;
+    } else if (q === 5) {
+      category["오류해결"].sum += score;
+      category["오류해결"].count += 1;
+    }
+  });
 
   return (
     <div style={{ padding: 40, maxWidth: 700, margin: "0 auto" }}>
       <h1>📊 관리자 페이지</h1>
 
-      {/* 응답자 수 */}
       <div style={{ marginTop: 30 }}>
         <h2>응답자 수</h2>
         <p style={{ fontSize: 22 }}>{respondentCount}명</p>
       </div>
 
-      {/* 종합 점수 */}
       <div style={{ marginTop: 30 }}>
         <h2>종합 평균 점수</h2>
         <p style={{ fontSize: 22 }}>{avgScore}점</p>
       </div>
 
-      {/* 문항별 점수 */}
       <div style={{ marginTop: 30 }}>
         <h2>문항별 점수</h2>
         {Object.entries(questionAvg).map(([q, v], i) => (
           <p key={i}>
-            {q}번 : {(v.sum / v.count).toFixed(1)}점
+            {Number(q) + 1}번 : {(v.sum / v.count).toFixed(1)}점
           </p>
         ))}
       </div>
 
-      {/* 항목별 점수 */}
       <div style={{ marginTop: 30 }}>
         <h2>항목별 점수</h2>
 
