@@ -28,24 +28,27 @@ export default function Home() {
     }));
   };
 
-  const submit = async () => {
-    const data = Object.entries(answers).map(([qIndex, answer]) => ({
-      question: Number(qIndex), // ⭐ 핵심 (0~5 숫자 저장)
-      answer,
-    }));
+const submit = async () => {
+  const data = questions.map((_, qIndex) => ({
+    question: qIndex,
+    answer: answers[qIndex] || null,
+  }));
 
-    const { error } = await supabase
-      .from("survey_responses")
-      .insert(data);
+  // ❗ 빈 답 제거 (핵심)
+  const filtered = data.filter(d => d.answer !== null);
 
-    if (error) {
-      console.error(error);
-      alert("저장 실패 😢");
-    } else {
-      alert("제출 완료 🎉");
-      setAnswers({});
-    }
-  };
+  const { error } = await supabase
+    .from("survey_responses")
+    .insert(filtered);
+
+  if (error) {
+    console.error(error);
+    alert("저장 실패 😢");
+  } else {
+    alert("제출 완료 🎉");
+    setAnswers({});
+  }
+};
 
   return (
     <div style={{ padding: 40, maxWidth: 700, margin: "0 auto" }}>
