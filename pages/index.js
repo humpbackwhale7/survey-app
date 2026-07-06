@@ -29,9 +29,8 @@ export default function Home() {
   };
 
   const submit = async () => {
-    // 🔥 핵심: question = 1~6 숫자 저장
     const data = Object.entries(answers).map(([qIndex, answer]) => ({
-      question: Number(qIndex) + 1,
+      question: questions[qIndex],   // 🔥 문장 그대로 저장
       answer,
     }));
 
@@ -42,13 +41,10 @@ export default function Home() {
     if (error) {
       console.error(error);
       alert("저장 실패 😢");
-      return;
+    } else {
+      alert("제출 완료 🎉");
+      setAnswers({});
     }
-
-    alert("제출 완료 🎉");
-
-    // 초기화
-    setAnswers({});
   };
 
   return (
@@ -57,32 +53,22 @@ export default function Home() {
 
       {questions.map((q, i) => (
         <div key={i} style={{ marginBottom: 20 }}>
-          <p style={{ fontWeight: "bold" }}>
-            {i + 1}. {q}
-          </p>
+          <p>{i + 1}. {q}</p>
 
           {options.map((opt) => (
-            <label key={opt} style={{ display: "block", marginBottom: 4 }}>
+            <label key={opt} style={{ display: "block" }}>
               <input
                 type="radio"
                 name={`q-${i}`}
-                checked={answers[i] === opt}
                 onChange={() => handleAnswer(i, opt)}
               />
-              {" "}{opt}
+              {opt}
             </label>
           ))}
         </div>
       ))}
 
-      <button
-        onClick={submit}
-        style={{
-          marginTop: 20,
-          padding: "10px 20px",
-          cursor: "pointer"
-        }}
-      >
+      <button onClick={submit}>
         제출
       </button>
     </div>
