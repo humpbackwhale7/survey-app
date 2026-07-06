@@ -30,18 +30,26 @@ export default function Home() {
 
   const submit = async () => {
     const data = Object.entries(answers).map(([qIndex, answer]) => ({
-      question: questions[qIndex],
+      question: qIndex + 1,   // 🔥 핵심 수정 (문장 → 숫자)
       answer,
     }));
 
-    await supabase.from("survey_responses").insert(data);
+    const { error } = await supabase
+      .from("survey_responses")
+      .insert(data);
 
-    alert("제출 완료 🎉");
+    if (error) {
+      console.error(error);
+      alert("저장 실패 😢");
+    } else {
+      alert("제출 완료 🎉");
+      setAnswers({});
+    }
   };
 
   return (
     <div style={{ padding: 40 }}>
-      <h1>설문조사(대상기간:2025.1.1~2025.12.31)</h1>
+      <h1>설문조사 (대상기간: 2025.1.1~2025.12.31)</h1>
 
       {questions.map((q, i) => (
         <div key={i} style={{ marginBottom: 20 }}>
