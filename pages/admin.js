@@ -79,8 +79,8 @@ export default function Admin() {
  responses.forEach((r) => {
   const score = scoreMap[r.answer] || 0;
 
-  // question을 숫자로 변환
-  const qNum = Number(r.question);
+  // 🔥 핵심 수정: 숫자만 추출
+  const qNum = parseInt(String(r.question).replace(/[^0-9]/g, ""));
 
   if (qNum === 1 || qNum === 2) {
     category["메뉴활용의 편리성"].sum += score;
