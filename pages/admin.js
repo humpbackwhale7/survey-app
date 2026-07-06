@@ -30,7 +30,7 @@ export default function Admin() {
   };
 
   // -------------------------
-  // 응답자 수 (6문항 = 1명)
+  // 응답자 수
   // -------------------------
   const respondentCount =
     responses.length > 0 ? Math.ceil(responses.length / 6) : 0;
@@ -47,12 +47,16 @@ export default function Admin() {
     : 0;
 
   // -------------------------
-  // 문항별 점수
+  // 문항별 점수 (🔥 핵심 수정)
   // -------------------------
   const questionAvg = {};
 
   responses.forEach((r) => {
-    const q = Number(r.question); // ⭐ 핵심
+    const q = Number(r.question);
+
+    // 🚨 핵심 방어코드 (NaN 제거)
+    if (!Number.isFinite(q)) return;
+
     const score = scoreMap[r.answer] || 0;
 
     if (!questionAvg[q]) {
@@ -64,7 +68,7 @@ export default function Admin() {
   });
 
   // -------------------------
-  // 항목별 점수
+  // 항목별 점수 (0~5 기준)
   // -------------------------
   const category = {
     "메뉴활용의 편리성": { sum: 0, count: 0 }, // 0,1
@@ -76,6 +80,10 @@ export default function Admin() {
 
   responses.forEach((r) => {
     const q = Number(r.question);
+
+    // 🚨 이것도 필수
+    if (!Number.isFinite(q)) return;
+
     const score = scoreMap[r.answer] || 0;
 
     if (q === 0 || q === 1) {
@@ -112,8 +120,8 @@ export default function Admin() {
 
       <div style={{ marginTop: 30 }}>
         <h2>문항별 점수</h2>
-        {Object.entries(questionAvg).map(([q, v], i) => (
-          <p key={i}>
+        {Object.entries(questionAvg).map(([q, v]) => (
+          <p key={q}>
             {Number(q) + 1}번 : {(v.sum / v.count).toFixed(1)}점
           </p>
         ))}
@@ -122,8 +130,8 @@ export default function Admin() {
       <div style={{ marginTop: 30 }}>
         <h2>항목별 점수</h2>
 
-        {Object.entries(category).map(([name, v], i) => (
-          <p key={i}>
+        {Object.entries(category).map(([name, v]) => (
+          <p key={name}>
             {name} :{" "}
             {v.count > 0 ? (v.sum / v.count).toFixed(1) : 0}점
           </p>
