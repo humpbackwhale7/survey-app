@@ -75,27 +75,39 @@ export default function Admin() {
     "오류해결": { sum: 0, count: 0 },
   };
 
-  responses.forEach((r) => {
-    const qNum = Number(r.question); // 🔥 핵심 수정
-    const score = scoreMap[r.answer] || 0;
+responses.forEach((r) => {
+  const score = scoreMap[r.answer] || 0;
+  const q = r.question;
 
-    if (qNum === 1 || qNum === 2) {
-      category["메뉴활용의 편리성"].sum += score;
-      category["메뉴활용의 편리성"].count += 1;
-    } else if (qNum === 3) {
-      category["디자인/가독성"].sum += score;
-      category["디자인/가독성"].count += 1;
-    } else if (qNum === 4) {
-      category["시스템 효율성"].sum += score;
-      category["시스템 효율성"].count += 1;
-    } else if (qNum === 5) {
-      category["오류예방"].sum += score;
-      category["오류예방"].count += 1;
-    } else if (qNum === 6) {
-      category["오류해결"].sum += score;
-      category["오류해결"].count += 1;
-    }
-  });
+  // 🔥 문장 기반 매핑 (정답 방식)
+  if (
+    q.includes("메뉴") ||
+    q.includes("화면 구성")
+  ) {
+    category["메뉴활용의 편리성"].sum += score;
+    category["메뉴활용의 편리성"].count += 1;
+  }
+
+  else if (q.includes("용어")) {
+    category["디자인/가독성"].sum += score;
+    category["디자인/가독성"].count += 1;
+  }
+
+  else if (q.includes("응답 속도")) {
+    category["시스템 효율성"].sum += score;
+    category["시스템 효율성"].count += 1;
+  }
+
+  else if (q.includes("오류 메시지")) {
+    category["오류예방"].sum += score;
+    category["오류예방"].count += 1;
+  }
+
+  else if (q.includes("전체 만족도")) {
+    category["오류해결"].sum += score;
+    category["오류해결"].count += 1;
+  }
+});
 
   return (
     <div style={{ padding: 40, maxWidth: 700, margin: "0 auto" }}>
