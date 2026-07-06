@@ -76,27 +76,37 @@ export default function Admin() {
     "오류해결": { sum: 0, count: 0 }, // 6
   };
 
-  responses.forEach((r) => {
-    const score = scoreMap[r.answer] || 0;
-    const q = r.question;
+ responses.forEach((r) => {
+  const score = scoreMap[r.answer] || 0;
 
-    if (q.includes("1") || q.includes("2")) {
-      category["메뉴활용의 편리성"].sum += score;
-      category["메뉴활용의 편리성"].count += 1;
-    } else if (q.includes("3")) {
-      category["디자인/가독성"].sum += score;
-      category["디자인/가독성"].count += 1;
-    } else if (q.includes("4")) {
-      category["시스템 효율성"].sum += score;
-      category["시스템 효율성"].count += 1;
-    } else if (q.includes("5")) {
-      category["오류예방"].sum += score;
-      category["오류예방"].count += 1;
-    } else if (q.includes("6")) {
-      category["오류해결"].sum += score;
-      category["오류해결"].count += 1;
-    }
-  });
+  // question을 숫자로 변환
+  const qNum = Number(r.question);
+
+  if (qNum === 1 || qNum === 2) {
+    category["메뉴활용의 편리성"].sum += score;
+    category["메뉴활용의 편리성"].count += 1;
+  }
+
+  else if (qNum === 3) {
+    category["디자인/가독성"].sum += score;
+    category["디자인/가독성"].count += 1;
+  }
+
+  else if (qNum === 4) {
+    category["시스템 효율성"].sum += score;
+    category["시스템 효율성"].count += 1;
+  }
+
+  else if (qNum === 5) {
+    category["오류예방"].sum += score;
+    category["오류예방"].count += 1;
+  }
+
+  else if (qNum === 6) {
+    category["오류해결"].sum += score;
+    category["오류해결"].count += 1;
+  }
+});
 
   return (
     <div style={{ padding: 40, maxWidth: 700, margin: "0 auto" }}>
